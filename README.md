@@ -1,7 +1,7 @@
 # youtrack-version-release
 YouTrack version releasing for you CI
 
-
+```
 YouTrack Release helper, marks a version as released and creates version numbers for follow up releases. Works with version numbers up to 3 digits
 
 Usage:
@@ -13,3 +13,4 @@ Options:
   --password=<password>
   --project=<project>        ID of project being released
   --version=<version>        The version number to be released (i.e 1.2.3)
+```
