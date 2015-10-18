@@ -13,7 +13,7 @@ namespace YoutrackUpdate
         {
             if (args.Length < 5)
             {
-                Console.WriteLine("YouTrack Release helper, marks a version as released and creates version numbers for follow up releases. Assumes semantic versioning (ie 3 digit version numbers)");
+                Console.WriteLine("YouTrack Release helper, marks a version as released and creates version numbers for follow up releases. Works with version numbers up to 3 digits");
                 Console.WriteLine("");
                 Console.WriteLine("Usage:");
                 Console.WriteLine("  YouTrackRelease --server=<server> --username=<username> --password=<password> --project=<project> --version=<version>");
@@ -32,8 +32,6 @@ namespace YoutrackUpdate
             var password = GetArgNotNull(args, "--password");
             var projectId = GetArgNotNull(args, "--project");
             var version = GetArgNotNull(args, "--version");
-
-            Console.Out.WriteLine("blah: " + JavaTimeNow());
 
             var uri = new Uri(server);
             Console.WriteLine("Connecting to server: {0}, {1}, {2}", uri, uri.Port, uri.AbsolutePath);
