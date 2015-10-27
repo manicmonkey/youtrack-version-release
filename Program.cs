@@ -11,6 +11,7 @@ namespace YoutrackUpdate
     {
         static void Main(string[] args)
         {
+            //todo use mono.options https://www.nuget.org/packages/Mono.Options/
             if (args.Length < 5)
             {
                 Console.WriteLine("YouTrack Release helper, marks a version as released and creates version numbers for follow up releases. Works with version numbers up to 3 digits");
@@ -53,7 +54,7 @@ namespace YoutrackUpdate
             projectManagement.UpdateVersion(project, new ProjectVersion { IsReleased = true, Name = version, ReleaseDate = JavaTimeNow() });
 
             var currentVersion = new VersionNumber(version);
-            var nextVersions = currentVersion.GetNextReleaseVersions().Select((v) => v.GetVersion());
+            var nextVersions = currentVersion.GetNextReleaseVersions().Select((v) => v.ToString());
 
             var missingVersions = nextVersions.Where((v) => !existingVersions.Contains(v));
             foreach (var newVersion in missingVersions)

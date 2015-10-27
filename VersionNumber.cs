@@ -1,77 +1,105 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YoutrackUpdate
 {
-    class VersionNumber
+    public class VersionNumber : IEquatable<VersionNumber>
     {
-        private readonly string _version;
+        private readonly int _major;
+        private readonly int? _minor;
+        private readonly int? _maintenance;
 
         public VersionNumber(string version)
         {
-            _version = version;
+            var parts = version.Split('.');
+            _major = int.Parse(parts[0]);
+            if (parts.Length > 1)
+                _minor = int.Parse(parts[1]);
+            if (parts.Length > 2)
+                _maintenance = int.Parse(parts[2]);
         }
 
-        public string GetVersion()
+        public VersionNumber(int major, int? minor, int? maintenance)
         {
-            return _version;
+            _major = major;
+            _minor = minor;
+            _maintenance = maintenance;
+        }
+
+        public override string ToString()
+        {
+            var version = _major.ToString();
+            if (_minor.HasValue)
+                version += "." + _minor.Value;
+            if (_maintenance.HasValue)
+                version += "." + _maintenance.Value;
+            return version;
         }
 
         public List<VersionNumber> GetNextReleaseVersions()
         {
             var releaseVersions = new List<VersionNumber> {NextMajor()};
-            if (SplitVersion(_version).Length > 1)
+            if (_minor.HasValue)
                 releaseVersions.Add(NextMinor());
-            if (SplitVersion(_version).Length > 2)
+            if (_maintenance.HasValue)
                 releaseVersions.Add(NextMaintenance());
             return releaseVersions;
         }
 
         private VersionNumber NextMajor()
         {
-            return new VersionNumber(IncrementPart(_version, 1));
+            return new VersionNumber(_major + 1, NullableOrZero(_minor), NullableOrZero(_maintenance));
         }
 
         private VersionNumber NextMinor()
         {
-            return new VersionNumber(IncrementPart(_version, 2));
+            return new VersionNumber(_major, _minor + 1, NullableOrZero(_maintenance));
         }
 
         private VersionNumber NextMaintenance()
         {
-            return new VersionNumber(IncrementPart(_version, 3));
+            return new VersionNumber(_major, _minor, _maintenance + 1);
         }
 
-        /// <summary>
-        /// Increments part of a version number and zeroes the remainder. 1-based.
-        /// </summary>
-        private static string IncrementPart(string version, int part)
+        private static int? NullableOrZero(int? potentialValue)
         {
-            var currentPart = GetVersionPart(version, part) + 1;
-            var updatedVersion = UpdateVersionPart(version, part, currentPart);
-            part++;
-            while (part - 1 < SplitVersion(version).Length)
+            return potentialValue.HasValue ? 0 : (int?)null;
+        }
+
+        public bool Equals(VersionNumber other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return _major == other._major && _minor == other._minor && _maintenance == other._maintenance;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((VersionNumber) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
             {
-                updatedVersion = UpdateVersionPart(updatedVersion, part, 0);
-                part++;
+                var hashCode = _major;
+                hashCode = (hashCode*397) ^ _minor.GetHashCode();
+                hashCode = (hashCode*397) ^ _maintenance.GetHashCode();
+                return hashCode;
             }
-            return updatedVersion;
         }
 
-        private static int GetVersionPart(string version, int part)
+        public static bool operator ==(VersionNumber left, VersionNumber right)
         {
-            return int.Parse(SplitVersion(version)[part - 1]);
+            return Equals(left, right);
         }
 
-        private static string UpdateVersionPart(string version, int part, int number)
+        public static bool operator !=(VersionNumber left, VersionNumber right)
         {
-            var versionParts = SplitVersion(version);
-            versionParts[part - 1] = number.ToString();
-            return string.Join(".", versionParts);
-        }
-
-        private static string[] SplitVersion(string version)
-        {
-            return version.Split('.');
+            return !Equals(left, right);
         }
     }
 }
