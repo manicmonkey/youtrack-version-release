@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutrackUpdate", "YoutrackUpdate.csproj", "{8AB5C89D-88E6-42BD-9007-F0C131BDF53D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutrackUpdate", "YoutrackUpdate\YoutrackUpdate.csproj", "{8AB5C89D-88E6-42BD-9007-F0C131BDF53D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutrackUpdate.Tests", "..\YoutrackUpdate.Tests\YoutrackUpdate.Tests.csproj", "{8D58D34C-D6DD-4B6B-90A2-C1AAAFE5C23A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutrackUpdate.Tests", "YoutrackUpdate.Tests\YoutrackUpdate.Tests.csproj", "{8D58D34C-D6DD-4B6B-90A2-C1AAAFE5C23A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
